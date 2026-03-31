@@ -1,0 +1,16 @@
+{
+  "name": "myschedule",
+  "version": "1.0.0",
+  "description": "````md\r # 🚀 My Schedule – Planning Document",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "standard-version": "^9.5.0"
+  }
+}
