@@ -1,8 +1,8 @@
 const express = require("express");
-const path = require("path");
 const connectDB = require("./config/db");
-const expressLayouts = require("express-ejs-layouts");
 const dotenv = require("dotenv");
+const registerRoutes = require("./routes");
+const handleError = require("./middleware/handleError.middleware");
 
 dotenv.config();
 
@@ -12,12 +12,13 @@ const PORT = process.env.PORT || 8000;
 async function start() {
   try {
     await connectDB();
-
     app.use(express.json());
-    app.set("view engine", "ejs");
-    app.set("views", path.join(__dirname, "views"));
-    app.use(expressLayouts);
     app.use(express.urlencoded({ extended: true }));
+
+    // Register API routes
+    registerRoutes(app);
+
+    app.use(handleError);
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

@@ -31,6 +31,7 @@ Item {
   _id
   name,
   email,
+  pasword,
   createdAt
 }
 ```
