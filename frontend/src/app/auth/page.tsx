@@ -1,6 +1,6 @@
 "use client";
-import Signin from "@/components/auth/Signin";
-import Signup from "@/components/auth/Signup";
+import Signin from "@/features/auth/components/Signin";
+import Signup from "@/features/auth/components/Signup";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -23,7 +23,8 @@ export default function Page() {
         <section
           className={`border border-slate-50 shadow-md rounded-2xl
         inset-shadow-sm/30 inset-shadow-primary/30 p-5
-        ${isLogin ? "w-100 h-100" : " w-100 h-125"}`}
+        duration-300 transition-all ease-in-out 
+        ${isLogin ? "w-100 h-100" : " w-100 h-145"}`}
         >
           {isLogin ? (
             <Signin isLogin={isLogin} setIsLogin={setIsLogin} />

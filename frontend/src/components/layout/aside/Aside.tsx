@@ -10,9 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, Send } from "lucide-react";
+import { useAuth } from "@/features/auth";
+import { Bell, LogOut, Send, UserCircleIcon } from "lucide-react";
 
 export default function Aside() {
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
   return (
     <div
       className="bg-linear-to-b from-[#FFF2E5] via-[#F8D5B9] to-[#F3B081] 
@@ -78,16 +85,35 @@ export default function Aside() {
                 </button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent className="w-44" align="end">
+              <DropdownMenuContent
+                className="w-44 bg-white/70 backdrop-blur-lg shadow-sm p-2
+                [&_div[data-radix-collection-item]]:p-2 
+             [&_div[data-radix-collection-item]]:cursor-pointer
+             [&_div[data-radix-collection-item]]:hover:ring-slate-300
+             [&_div[data-radix-collection-item]]:hover:ring"
+                align="end"
+              >
                 <DropdownMenuGroup>
+                  <div
+                    className="absolute top-0 left-0 w-full h-[45%] bg-linear-to-b from-white 
+                to-transparent opacity-60 z-0 pointer-events-none"
+                  ></div>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <div className="flex justify-between items-center">
+                      <p>Profile</p>
+                      <UserCircleIcon />
+                    </div>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-slate-500" />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>Team</DropdownMenuItem>
-                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                  <DropdownMenuItem asChild onClick={handleLogout}>
+                    <div className="flex justify-between items-center">
+                      <p>Logout</p>
+                      <LogOut />
+                    </div>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
