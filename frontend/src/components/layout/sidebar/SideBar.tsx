@@ -25,7 +25,11 @@ export default function SideBar() {
         {/* Nav - center */}
         <main className="flex items-center justify-center">
           <nav className="flex flex-col gap-5">
-            <SidebarItem icon={LayoutGridIcon} label="Dashboard" path="/" />
+            <SidebarItem
+              icon={LayoutGridIcon}
+              label="Dashboard"
+              path="/dashboard"
+            />
             <SidebarItem icon={ListTodo} label="Tasks" path="/tasks" />
             <SidebarItem icon={ChartLine} label="Timeline" path="/timeline" />
           </nav>
