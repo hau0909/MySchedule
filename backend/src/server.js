@@ -3,7 +3,8 @@ const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const registerRoutes = require("./routes");
 const handleError = require("./middleware/handleError.middleware");
-
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 dotenv.config();
 
 const app = express();
@@ -14,6 +15,14 @@ async function start() {
     await connectDB();
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      }),
+    );
+
+    app.use(cookieParser());
 
     // Register API routes
     registerRoutes(app);

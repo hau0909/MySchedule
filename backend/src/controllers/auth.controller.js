@@ -18,7 +18,19 @@ exports.signup = asyncHandler(async (req, res, next) => {
 exports.signin = asyncHandler(async (req, res, next) => {
   try {
     const result = await authService.signin(req.body);
-    res.status(201).json(result);
+
+    res.cookie("token", result.token, {
+      httpOnly: true,
+      secure: false, //dev
+      sameSite: "lax",
+    });
+
+    console.log("login success");
+
+    res.status(200).json({
+      message: "Login success",
+      user: result.user, // nếu có
+    });
   } catch (error) {
     next(error);
   }
