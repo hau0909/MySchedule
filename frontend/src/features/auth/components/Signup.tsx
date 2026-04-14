@@ -1,4 +1,7 @@
+import { FormEvent, useState } from "react";
 import { Input } from "../../../components/ui/input";
+import { useRouter } from "next/navigation";
+import { signup } from "../services/auth.api";
 
 type Props = {
   isLogin: boolean;
@@ -6,8 +9,41 @@ type Props = {
 };
 
 export default function Signup({ isLogin, setIsLogin }: Props) {
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+
   const handleChangeStatus = () => {
     setIsLogin(!isLogin);
+  };
+
+  const handleValidate = () => {
+    if (password.trim() !== confirmPassword.trim()) {
+      console.error("Not matching password!");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      if (!handleValidate()) return;
+
+      const isCreated = await signup({ email, password, name });
+
+      if (isCreated) return router.push("/dashboard");
+    } catch (error) {
+      console.error("(Login failed)", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -23,10 +59,12 @@ export default function Signup({ isLogin, setIsLogin }: Props) {
         >
           signup
         </p>
-        <form className="space-y-2">
+        <form className="space-y-2" onSubmit={handleSignup}>
           <section className="space-y-1">
             <p className="font-semibold text-slate-800">Name</p>
             <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-80 placeholder:italic p-5 outline-none focus-visible:ring-0
               border-2 focus-visible:border-primary focus-visible:bg-secondary/5"
               type="text"
@@ -38,6 +76,8 @@ export default function Signup({ isLogin, setIsLogin }: Props) {
           <section className="space-y-1">
             <p className="font-semibold text-slate-800">Email</p>
             <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-80 placeholder:italic p-5 outline-none focus-visible:ring-0
               border-2 focus-visible:border-primary focus-visible:bg-secondary/5"
               type="email"
@@ -51,6 +91,8 @@ export default function Signup({ isLogin, setIsLogin }: Props) {
           <section className="space-y-1">
             <p className="font-semibold text-slate-800">Password</p>
             <Input
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               className="w-80 placeholder:italic p-5 outline-none focus-visible:ring-0
               border-2 focus-visible:border-primary focus-visible:bg-secondary/5"
               type="password"
@@ -64,6 +106,8 @@ export default function Signup({ isLogin, setIsLogin }: Props) {
           <section className="space-y-1">
             <p className="font-semibold text-slate-800">Confirm Password</p>
             <Input
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-80 placeholder:italic p-5 outline-none focus-visible:ring-0
               border-2 focus-visible:border-primary focus-visible:bg-secondary/5"
               type="password"
@@ -77,10 +121,12 @@ export default function Signup({ isLogin, setIsLogin }: Props) {
           <section className="text-center">
             <button
               type="submit"
-              className="py-2 px-3.5 bg-primary shadow-sm rounded-full cursor-pointer
-              active:scale-90 duration-300 transition-all ease-in-out"
+              disabled={isLoading}
+              className="py-2 px-3.5 bg-primary shadow-sm rounded-full transition-all duration-300 ease-in-out
+              cursor-pointer active:scale-90
+              disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
             >
-              <p className="uppercase font-bold text-xs text-white">login</p>
+              <p className="uppercase font-bold text-xs text-white">Register</p>
             </button>
           </section>
         </form>
