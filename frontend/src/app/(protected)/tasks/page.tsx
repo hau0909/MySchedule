@@ -100,8 +100,12 @@ export default function page() {
             <div className="w-[35%] flex gap-3 items-start">
               <div className="w-1.5 h-1.5 rounded-full bg-[#9c591c] mt-1.5 shrink-0"></div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-800">Product Strategy Sync</span>
-                <span className="text-[11px] text-slate-400 font-semibold">High Priority</span>
+                <span className="text-sm font-bold text-slate-800">
+                  Product Strategy Sync
+                </span>
+                <span className="text-[11px] text-slate-400 font-semibold">
+                  High Priority
+                </span>
               </div>
             </div>
             <div className="w-[20%] flex justify-center">
@@ -110,11 +114,15 @@ export default function page() {
               </span>
             </div>
             <div className="w-[20%] text-center">
-              <span className="text-xs font-semibold text-slate-600">45 min</span>
+              <span className="text-xs font-semibold text-slate-600">
+                45 min
+              </span>
             </div>
             <div className="w-[15%] flex gap-2 items-center">
               <div className="w-1.5 h-1.5 rounded-full bg-[#f97316] shrink-0"></div>
-              <span className="text-xs font-extrabold text-slate-800">In Progress</span>
+              <span className="text-xs font-extrabold text-slate-800">
+                In Progress
+              </span>
             </div>
             <div className="w-[10%] text-right"></div>
           </div>
@@ -124,8 +132,12 @@ export default function page() {
             <div className="w-[35%] flex gap-3 items-start">
               <div className="w-1.5 h-1.5 rounded-full bg-[#cbd5e1] mt-1.5 shrink-0"></div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-800">UI Design Review</span>
-                <span className="text-[11px] text-slate-400 font-semibold">Project: Radiant</span>
+                <span className="text-sm font-bold text-slate-800">
+                  UI Design Review
+                </span>
+                <span className="text-[11px] text-slate-400 font-semibold">
+                  Project: Radiant
+                </span>
               </div>
             </div>
             <div className="w-[20%] flex justify-center">
@@ -134,11 +146,15 @@ export default function page() {
               </span>
             </div>
             <div className="w-[20%] text-center">
-              <span className="text-xs font-semibold text-slate-600">120 min</span>
+              <span className="text-xs font-semibold text-slate-600">
+                120 min
+              </span>
             </div>
             <div className="w-[15%] flex gap-2 items-center">
               <div className="w-1.5 h-1.5 rounded-full bg-[#eab308] shrink-0"></div>
-              <span className="text-xs font-extrabold text-slate-800">Pending</span>
+              <span className="text-xs font-extrabold text-slate-800">
+                Pending
+              </span>
             </div>
             <div className="w-[10%] text-right"></div>
           </div>
@@ -148,8 +164,12 @@ export default function page() {
             <div className="w-[35%] flex gap-3 items-start">
               <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e] mt-1.5 shrink-0"></div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-800">Daily Reflection</span>
-                <span className="text-[11px] text-slate-400 font-semibold">Personal Wellbeing</span>
+                <span className="text-sm font-bold text-slate-800">
+                  Daily Reflection
+                </span>
+                <span className="text-[11px] text-slate-400 font-semibold">
+                  Personal Wellbeing
+                </span>
               </div>
             </div>
             <div className="w-[20%] flex justify-center">
@@ -158,11 +178,15 @@ export default function page() {
               </span>
             </div>
             <div className="w-[20%] text-center">
-              <span className="text-xs font-semibold text-slate-600">15 min</span>
+              <span className="text-xs font-semibold text-slate-600">
+                15 min
+              </span>
             </div>
             <div className="w-[15%] flex gap-2 items-center">
               <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e] shrink-0"></div>
-              <span className="text-xs font-extrabold text-slate-800">Completed</span>
+              <span className="text-xs font-extrabold text-slate-800">
+                Completed
+              </span>
             </div>
             <div className="w-[10%] text-right"></div>
           </div>
@@ -172,8 +196,12 @@ export default function page() {
             <div className="w-[35%] flex gap-3 items-start">
               <div className="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 shrink-0"></div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-800">Database Optimization</span>
-                <span className="text-[11px] text-slate-400 font-semibold">Engineering</span>
+                <span className="text-sm font-bold text-slate-800">
+                  Database Optimization
+                </span>
+                <span className="text-[11px] text-slate-400 font-semibold">
+                  Engineering
+                </span>
               </div>
             </div>
             <div className="w-[20%] flex justify-center">
@@ -182,11 +210,15 @@ export default function page() {
               </span>
             </div>
             <div className="w-[20%] text-center">
-              <span className="text-xs font-semibold text-slate-600">90 min</span>
+              <span className="text-xs font-semibold text-slate-600">
+                90 min
+              </span>
             </div>
             <div className="w-[15%] flex gap-2 items-center">
               <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] shrink-0"></div>
-              <span className="text-xs font-extrabold text-slate-800">Critical</span>
+              <span className="text-xs font-extrabold text-slate-800">
+                Critical
+              </span>
             </div>
             <div className="w-[10%] text-right"></div>
           </div>
@@ -194,7 +226,9 @@ export default function page() {
 
         {/* Footer */}
         <footer className="flex justify-between items-center mt-12 pt-4 w-full">
-          <span className="text-[11px] font-semibold text-slate-400">Showing 4 of 24 tasks</span>
+          <span className="text-[11px] font-semibold text-slate-400">
+            Showing 4 of 24 tasks
+          </span>
           <div className="flex items-center gap-1">
             <button className="w-7 h-7 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 transition-colors">
               <ChevronLeft size={14} />

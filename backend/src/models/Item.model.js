@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const ItemSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
+    title: { type: String, required: true, trim: true },
+    description: { type: String, required: true, trim: true },
     type: { type: String, enum: ["task", "event", "meeting"], default: "task" },
     status: {
       type: String,
@@ -16,8 +16,8 @@ const ItemSchema = new mongoose.Schema(
       default: "low",
     },
 
-    startTime: { type: Date },
-    endTime: { type: Date },
+    startTime: { type: Date, required: true },
+    endTime: { type: Date, required: true },
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -27,5 +27,7 @@ const ItemSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+ItemSchema.index({ userId: 1, status: 1 });
 
 module.exports = mongoose.model("Item", ItemSchema);
