@@ -9,19 +9,11 @@ type Props = {
 };
 
 export default function Signin({ isLogin, setIsLogin }: Props) {
-  const { login, user } = useAuth();
-  const router = useRouter();
+  const { login } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    const fetch = () => {
-      if (user) router.push("/dashboard");
-    };
-    fetch();
-  }, [router, user]);
 
   const handleChangeStatus = () => {
     setIsLogin(!isLogin);
