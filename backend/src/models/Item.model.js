@@ -7,7 +7,7 @@ const ItemSchema = new mongoose.Schema(
     type: { type: String, enum: ["task", "event", "meeting"], default: "task" },
     status: {
       type: String,
-      enum: ["pending", "in-done", "archived", "closed"],
+      enum: ["pending", "in-progress", "completed", "cancelled", "archived"],
       default: "pending",
     },
     priority: {

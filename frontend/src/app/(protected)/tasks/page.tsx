@@ -1,3 +1,4 @@
+import AddTaskModal from "@/features/task/components/AddTaskModal";
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function page() {
@@ -15,7 +16,7 @@ export default function page() {
         </section>
 
         {/* Add button */}
-        <section
+        {/* <section
           className="flex group justify-center gap-2 items-center p-3 cursor-pointer
         bg-primary rounded-full text-white ring-1 ring-slate-100 shadow-md/10 
         inset-shadow-sm inset-shadow-white hover:bg-primary/90 hover:scale-105 
@@ -25,7 +26,9 @@ export default function page() {
             size={30}
             className="group-hover:-rotate-90 duration-300 transition-all ease-in-out"
           />
-        </section>
+        </section> */}
+
+        <AddTaskModal />
       </header>
 
       <main className="flex items-center w-full gap-4">
