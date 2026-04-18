@@ -25,9 +25,11 @@ import { Plus } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Item } from "@/types/Item";
 import { createNewItem } from "../services/item.api";
+import toast from "react-hot-toast";
 
 export default function AddTaskModal() {
   const [open, setOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [item, setItem] = useState<Item | null>();
 
   const handleInputChange = async (
@@ -62,26 +64,33 @@ export default function AddTaskModal() {
 
   const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!item) return;
-
-    const payload = {
-      ...item,
-      type: item.type ?? "task",
-      priority: item.priority ?? "low",
-      status: "pending",
-    } as Item;
-
-    setItem(payload);
-
     try {
-      const createdItem = await createNewItem(payload);
-      if (createdItem) {
-        setItem(null);
-        setOpen(false);
-      }
+      setIsCreating(true);
+
+      if (!item) return;
+
+      const payload = {
+        ...item,
+        type: item.type ?? "task",
+        priority: item.priority ?? "low",
+        status: "pending",
+      } as Item;
+
+      setItem(payload);
+
+      await toast.promise(createNewItem(payload), {
+        loading: "Creating your task...",
+        success: () => {
+          setItem(null);
+          setOpen(false);
+          return "Task created successfully!";
+        },
+        error: "Failed to create task",
+      });
     } catch (error) {
       console.error("Create failed: ", error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -118,6 +127,7 @@ export default function AddTaskModal() {
               Task Title
             </Label>
             <Input
+              disabled={isCreating}
               required
               value={item?.title || ""}
               onChange={handleInputChange}
@@ -135,6 +145,7 @@ export default function AddTaskModal() {
             </Label>
 
             <Textarea
+              disabled={isCreating}
               required
               value={item?.description || ""}
               onChange={handleInputChange}
@@ -150,6 +161,7 @@ export default function AddTaskModal() {
             <div className="flex items-center gap-2">
               <Label className="text-sm font-semibold">Type</Label>
               <Select
+                disabled={isCreating}
                 defaultValue="task"
                 onValueChange={(value) => handleSelectChange("type", value)}
               >
@@ -167,6 +179,7 @@ export default function AddTaskModal() {
             <div className="flex items-center gap-2">
               <Label className="text-sm font-semibold">Priority</Label>
               <Select
+                disabled={isCreating}
                 defaultValue="low"
                 onValueChange={(value) => handleSelectChange("priority", value)}
               >
@@ -189,6 +202,7 @@ export default function AddTaskModal() {
                 Start Time
               </Label>
               <Input
+                disabled={isCreating}
                 required
                 value={item?.startTime || ""}
                 onChange={handleInputChange}
@@ -202,6 +216,7 @@ export default function AddTaskModal() {
                 End Time
               </Label>
               <Input
+                disabled={isCreating}
                 required
                 value={item?.endTime || ""}
                 onChange={handleInputChange}
@@ -215,6 +230,7 @@ export default function AddTaskModal() {
           <DialogFooter className="gap-2">
             <DialogClose asChild>
               <Button
+                disabled={isCreating}
                 type="button"
                 variant="ghost"
                 className="rounded-full px-6 shadow-sm cursor-pointer"
@@ -224,6 +240,7 @@ export default function AddTaskModal() {
               </Button>
             </DialogClose>
             <Button
+              disabled={isCreating}
               type="submit"
               className="rounded-full px-8 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20
               hover:scale-103 active:scale-93 transition-all duration-300 ease-in-out cursor-pointer"
