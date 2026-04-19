@@ -3,6 +3,7 @@ import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/features/auth";
 import { Toaster } from "react-hot-toast";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -24,7 +25,7 @@ export default function RootLayout({
     <html lang="en" className={`${notoSans.className} h-full antialiased`}>
       <body>
         <AuthProvider>
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
           <Toaster />
         </AuthProvider>
       </body>

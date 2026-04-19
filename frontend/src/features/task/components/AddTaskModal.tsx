@@ -27,7 +27,11 @@ import { Item } from "@/types/Item";
 import { createNewItem } from "../services/item.api";
 import toast from "react-hot-toast";
 
-export default function AddTaskModal() {
+type Props = {
+  onAddSuccess: (item: Item) => void;
+};
+
+export default function AddTaskModal({ onAddSuccess }: Props) {
   const [open, setOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [item, setItem] = useState<Item | null>();
@@ -81,6 +85,7 @@ export default function AddTaskModal() {
       await toast.promise(createNewItem(payload), {
         loading: "Creating your task...",
         success: () => {
+          onAddSuccess(payload);
           setItem(null);
           setOpen(false);
           return "Task created successfully!";
