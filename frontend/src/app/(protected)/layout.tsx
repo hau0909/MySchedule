@@ -44,7 +44,7 @@ export default function ProtectedLayout({
       <section className="overflow-y-auto bg-neutral-100/75">
         <div className="my-7 mx-10">
           <Header />
-          <div className="mt-10">{children}</div>
+          <div className="mt-8">{children}</div>
         </div>
       </section>
 
