@@ -5,8 +5,8 @@ const asyncHandlerUtils = require("../utils/asyncHandler.utils");
 exports.getAllItems = asyncHandlerUtils(async (req, res, next) => {
   try {
     const result = await itemService.getAllItems({
-      reqLimit: req.body.limit,
-      reqPage: req.body.page,
+      reqLimit: req.query.limit,
+      reqPage: req.query.page,
     });
 
     res.status(200).json({
