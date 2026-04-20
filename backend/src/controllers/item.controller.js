@@ -4,10 +4,16 @@ const asyncHandlerUtils = require("../utils/asyncHandler.utils");
 // feat(task): get all tasks
 exports.getAllItems = asyncHandlerUtils(async (req, res, next) => {
   try {
-    const result = await itemService.getAllItems(req.body);
+    const result = await itemService.getAllItems({
+      reqLimit: req.body.limit,
+      reqPage: req.body.page,
+    });
 
     res.status(200).json({
       items: result.items,
+      page: result.page,
+      totalItems: result.totalItems,
+      totalPages: result.totalPages,
     });
   } catch (error) {
     next(error);
