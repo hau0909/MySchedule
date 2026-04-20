@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import AddTaskModal from "@/features/task/components/AddTaskModal";
@@ -11,6 +10,8 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const [items, setItems] = useState<Item[] | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const handleAddItem = (newItem: Item) => {
     if (!newItem) return;
@@ -20,9 +21,39 @@ export default function Page() {
     });
   };
 
-  const fetchItems = async () => {
-    const itemsData = await getAllItems();
-    if (itemsData) setItems(itemsData);
+  const handleFetchItems = async (page: number) => {
+    setCurrentPage(page);
+    fetchItems(page);
+  };
+
+  const getPaginationRange = (currentPage: number, totalPages: number) => {
+    const delta = 2; // Số lượng trang hiển thị bên trái/phải trang hiện tại
+    const range = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      // Luôn hiển thị trang đầu, trang cuối, và các trang trong khoảng delta
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        range.push(i);
+      }
+      // Thêm dấu "..." nếu có khoảng cách
+      else if (range[range.length - 1] !== "...") {
+        range.push("...");
+      }
+    }
+    return range;
+  };
+
+  const fetchItems = async (page?: number) => {
+    const data = await getAllItems(page || 1);
+
+    if (data) {
+      setItems(data.items);
+      setTotalPages(data.totalPages);
+    }
   };
 
   useEffect(() => {
@@ -54,23 +85,68 @@ export default function Page() {
           {/* filter */}
           <div></div>
 
-          <div className="flex items-center gap-1">
-            <button className="w-7 h-7 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 transition-colors">
-              <ChevronLeft size={14} />
-            </button>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-[#ff8800] text-white font-bold text-[11px] shadow-sm">
-              1
-            </button>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full text-slate-600 font-bold text-[11px] hover:bg-slate-50 transition-colors">
-              2
-            </button>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full text-slate-600 font-bold text-[11px] hover:bg-slate-50 transition-colors">
-              3
-            </button>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-50 transition-colors">
-              <ChevronRight size={14} />
-            </button>
-          </div>
+          {totalPages == 0 ? (
+            <div></div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => handleFetchItems(currentPage - 1)}
+                className={`w-7 h-7 flex items-center justify-center rounded-full 
+              text-slate-400  transition-colors 
+                ${currentPage !== 1 && "hover:bg-slate-50 cursor-pointer"}`}
+              >
+                <ChevronLeft size={14} />
+              </button>
+
+              {getPaginationRange(currentPage, totalPages).map(
+                (page, index) => {
+                  if (page === "...") {
+                    return (
+                      <span
+                        key={`dots-${index}`}
+                        className="px-2 text-slate-400 font-bold"
+                      >
+                        ...
+                      </span>
+                    );
+                  }
+
+                  const isActive = currentPage === page;
+
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        if (typeof page === "number") {
+                          handleFetchItems(page);
+                        }
+                      }}
+                      className={`w-7 h-7 flex items-center justify-center
+                      rounded-full font-bold text-[11px] transition-colors 
+                      ${
+                        isActive
+                          ? "bg-[#ff8800] text-white shadow-sm"
+                          : "text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                },
+              )}
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => handleFetchItems(currentPage + 1)}
+                className={`w-7 h-7 flex items-center justify-center rounded-full 
+              text-slate-400  transition-colors 
+                ${currentPage !== totalPages && "hover:bg-slate-50 cursor-pointer"}`}
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          )}
         </footer>
       </section>
     </div>

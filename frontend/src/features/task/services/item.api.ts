@@ -8,12 +8,18 @@ export const createNewItem = async (item: Item) => {
   });
 };
 
-export const getAllItems = async () => {
-  const data = await fetcher("/items", {
+export const getAllItems = async (page: number) => {
+  const data = await fetcher(`/items?page=${page}&limit=10`, {
     method: "GET",
   });
 
   if (data) {
-    if (data.items) return data.items as Item[];
+    if (data.items)
+      return {
+        items: data.items as Item[],
+        page: data.page,
+        totalItems: data.totalItems,
+        totalPages: data.totalPages,
+      };
   }
 };

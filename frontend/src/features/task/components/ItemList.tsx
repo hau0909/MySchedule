@@ -22,7 +22,6 @@ import { Item } from "@/types/Item";
 export default function ItemList({ items = [] }: { items: Item[] }) {
   return (
     <Table>
-      {/* <TableCaption className="text-left">Showing 4 of 24 tasks</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead className="w-100">
