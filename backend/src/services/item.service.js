@@ -2,12 +2,19 @@ const Item = require("../models/Item.model");
 const AppError = require("../utils/AppError.utils");
 
 // feat(task): gett ALl Tasks
-exports.getAllItems = async () => {
-  const items = await Item.find();
+exports.getAllItems = async ({ reqPage, reqLimit }) => {
+  const page = parseInt(reqPage) || 1;
+  const limit = parseInt(reqLimit) || 10;
+  const skip = (page - 1) * limit;
+
+  const items = await Item.find().skip(skip).limit(limit).exec();
+
+  const totalItems = await Item.countDocuments({});
+  const totalPages = Math.ceil(totalItems / limit);
 
   if (!items) return { items: [] };
 
-  return { items };
+  return { items, totalItems, page, totalPages };
 };
 
 // feat(task): gett item by Id
