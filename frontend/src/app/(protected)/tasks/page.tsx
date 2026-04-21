@@ -21,6 +21,17 @@ export default function Page() {
     });
   };
 
+  const handleUpdateItemSuccess = (updatedItem: Item) => {
+    setItems((prev) => {
+      if (!prev) return null;
+      return prev.map((item) => {
+        const itemId = item._id;
+        const updatedId = updatedItem._id;
+        return itemId === updatedId ? updatedItem : item;
+      });
+    });
+  };
+
   const handleFetchItems = async (page: number) => {
     setCurrentPage(page);
     fetchItems(page);
@@ -80,7 +91,12 @@ export default function Page() {
         className="w-full border h-140 rounded-2xl bg-white p-5 
       flex flex-col justify-between"
       >
-        {!items || items.length <= 0 ? <></> : <ItemList items={items} />}
+        {!items || items.length <= 0 ? (
+          <></>
+        ) : (
+          <ItemList items={items} onSuccessUpdate={handleUpdateItemSuccess} />
+        )}
+
         <footer className="flex justify-between items-center w-full">
           {/* filter */}
           <div></div>
