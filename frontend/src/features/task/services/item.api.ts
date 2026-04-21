@@ -23,3 +23,10 @@ export const getAllItems = async (page: number) => {
       };
   }
 };
+
+export const updateItem = async (item: Item) => {
+  return await fetcher(`/items/${item._id}`, {
+    method: "PATCH",
+    body: JSON.stringify(item),
+  });
+};
