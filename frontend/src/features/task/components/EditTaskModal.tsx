@@ -1,4 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+"use client";
+import { ChangeEvent, Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +22,16 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Item } from "@/types/Item";
 import { toDateTimeLocal } from "../utils/toDateTimeLocal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Props = {
   isOpen: boolean;
@@ -42,6 +53,21 @@ export default function EditTaskModal({
   item,
   setItem,
 }: Props) {
+  const [currentStatus, setCurrentStatus] = useState(item?.status);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentStatus(item?.status);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsConfirmOpen(true);
+  };
+
   const handleInputChange = async (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -73,7 +99,8 @@ export default function EditTaskModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-125 overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-slate-800">
@@ -84,7 +111,7 @@ export default function EditTaskModal({
           </DialogDescription>
         </DialogHeader>
 
-        <form className="space-y-6" onSubmit={onUpdating}>
+        <form className="space-y-6" onSubmit={handleFormSubmit}>
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-semibold">
@@ -159,6 +186,51 @@ export default function EditTaskModal({
             </div>
           </div>
 
+          <div className="flex items-center gap-2">
+            <Label className="text-sm font-semibold">Status</Label>
+            <Select
+              disabled={isEditing || currentStatus === "archived"}
+              defaultValue={item?.status}
+              onValueChange={(value) => handleSelectChange("status", value)}
+            >
+              <SelectTrigger className="rounded-xl border-slate-200">
+                <SelectValue placeholder="Set status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem
+                  value="pending"
+                  disabled={currentStatus !== "pending"}
+                >
+                  Pending
+                </SelectItem>
+                <SelectItem
+                  value="in-progress"
+                  disabled={currentStatus !== "pending" && currentStatus !== "in-progress"}
+                >
+                  In progress
+                </SelectItem>
+                <SelectItem
+                  value="completed"
+                  disabled={currentStatus === "cancelled" || currentStatus === "archived"}
+                >
+                  Completed
+                </SelectItem>
+                <SelectItem 
+                  value="cancelled"
+                  disabled={currentStatus === "completed" || currentStatus === "archived"}
+                >
+                  Cancelled
+                </SelectItem>
+                <SelectItem 
+                  value="archived"
+                  disabled={currentStatus === "completed" || currentStatus === "cancelled" || currentStatus === "archived"}
+                >
+                  Archived
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Dates Row */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -215,5 +287,29 @@ export default function EditTaskModal({
         </form>
       </DialogContent>
     </Dialog>
+
+      <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will update the task with the new details. Do you want to proceed?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isEditing}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              disabled={isEditing}
+              onClick={(e) => {
+                onUpdating(e as unknown as ChangeEvent);
+                setIsConfirmOpen(false);
+              }}
+            >
+              Confirm Update
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
