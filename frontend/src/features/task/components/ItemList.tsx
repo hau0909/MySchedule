@@ -22,6 +22,7 @@ import { Item } from "@/types/Item";
 import { ChangeEvent, useState } from "react";
 import EditTaskModal from "./EditTaskModal";
 import { updateItem } from "../services/item.api";
+import toast from "react-hot-toast";
 
 export default function ItemList({
   items = [],
@@ -44,12 +45,16 @@ export default function ItemList({
     if (!item) return;
     try {
       setIsEditing(true);
-      const result = await updateItem(item);
 
-      if (result.success) {
-        onSuccessUpdate(item);
-        setOpen(false);
-      }
+      await toast.promise(updateItem(item), {
+        loading: "Updating your task...",
+        success: () => {
+          onSuccessUpdate(item);
+          setOpen(false);
+          return "Task updated successfully!";
+        },
+        error: "Failed to update task",
+      });
     } catch (error) {
       console.error("Update item Failed: ", error);
     } finally {
