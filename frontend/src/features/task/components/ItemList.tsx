@@ -21,19 +21,26 @@ import { Item } from "@/types/Item";
 
 import { ChangeEvent, useState } from "react";
 import EditTaskModal from "./EditTaskModal";
-import { updateItem } from "../services/item.api";
+import { updateItem, deleteItem } from "../services/item.api";
 import toast from "react-hot-toast";
+import { Trash2 } from "lucide-react";
+import DeleteTaskConfirm from "./DeleteTaskConfirm";
 
 export default function ItemList({
   items = [],
   onSuccessUpdate,
+  onSuccessDelete,
 }: {
   items: Item[];
   onSuccessUpdate: (item: Item) => void;
+  onSuccessDelete: (id: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [item, setItem] = useState<Item | null>(null);
+
+  const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
+  const [isDeletingList, setIsDeletingList] = useState(false);
 
   const handleOpenEdit = async (item: Item) => {
     setOpen(true);
@@ -57,6 +64,51 @@ export default function ItemList({
       });
     } catch (error) {
       console.error("Update item Failed: ", error);
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
+  const handleDelete = async (itemToDel: Item) => {
+    if (!itemToDel._id) return;
+    setItemToDelete(itemToDel);
+  };
+
+  const handleConfirmDeleteList = async () => {
+    if (!itemToDelete?._id) return;
+    try {
+      setIsDeletingList(true);
+      await toast.promise(deleteItem(itemToDelete._id), {
+        loading: "Deleting your task...",
+        success: () => {
+          onSuccessDelete(itemToDelete._id as string);
+          setItemToDelete(null);
+          return "Task deleted successfully!";
+        },
+        error: "Failed to delete task",
+      });
+    } catch (error) {
+      console.error("Delete item Failed: ", error);
+    } finally {
+      setIsDeletingList(false);
+    }
+  };
+
+  const handleDeleteItemModal = async (itemToDel: Item) => {
+    if (!itemToDel?._id) return;
+    try {
+      setIsEditing(true);
+      await toast.promise(deleteItem(itemToDel._id), {
+        loading: "Deleting your task...",
+        success: () => {
+          onSuccessDelete(itemToDel._id as string);
+          setOpen(false);
+          return "Task deleted successfully!";
+        },
+        error: "Failed to delete task",
+      });
+    } catch (error) {
+      console.error("Delete item Failed: ", error);
     } finally {
       setIsEditing(false);
     }
@@ -86,6 +138,7 @@ export default function ItemList({
             <TableHead className="text-right w-30">
               <p className="font-semibold text-[15px] text-slate-600">Status</p>
             </TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -131,6 +184,19 @@ export default function ItemList({
               <TableCell className="text-right">
                 <StatusBadge status={item.status} />
               </TableCell>
+              <TableCell
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (item) handleDelete(item);
+                }}
+                className="group"
+              >
+                <Trash2
+                  size={20}
+                  className="text-slate-500 group-hover:text-red-500 cursor-pointer
+                  group-hover:scale-115 transition-all duration-300 ease-in-out"
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -144,8 +210,18 @@ export default function ItemList({
           item={item}
           setItem={setItem}
           onUpdating={handleUpdateItem}
+          onDeleting={handleDeleteItemModal}
         />
       )}
+
+      <DeleteTaskConfirm
+        isOpen={!!itemToDelete}
+        setIsOpen={(isOpen) => {
+          if (!isOpen && !isDeletingList) setItemToDelete(null);
+        }}
+        isProcessing={isDeletingList}
+        onConfirm={handleConfirmDeleteList}
+      />
     </>
   );
 }
