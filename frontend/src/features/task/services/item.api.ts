@@ -30,3 +30,9 @@ export const updateItem = async (item: Item) => {
     body: JSON.stringify(item),
   });
 };
+
+export const deleteItem = async (id: string) => {
+  return await fetcher(`/items/${id}`, {
+    method: "DELETE",
+  });
+};

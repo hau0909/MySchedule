@@ -32,6 +32,10 @@ export default function Page() {
     });
   };
 
+  const handleDeleteItemSuccess = () => {
+    fetchItems(currentPage);
+  };
+
   const handleFetchItems = async (page: number) => {
     setCurrentPage(page);
     fetchItems(page);
@@ -94,7 +98,11 @@ export default function Page() {
         {!items || items.length <= 0 ? (
           <></>
         ) : (
-          <ItemList items={items} onSuccessUpdate={handleUpdateItemSuccess} />
+          <ItemList
+            items={items}
+            onSuccessUpdate={handleUpdateItemSuccess}
+            onSuccessDelete={handleDeleteItemSuccess}
+          />
         )}
 
         <footer className="flex justify-between items-center w-full">
